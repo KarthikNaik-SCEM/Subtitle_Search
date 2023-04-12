@@ -8,12 +8,7 @@ import srt
 
 
 root= Tk()
-root.geometry("150x55")
-root.iconbitmap('favicon.ico')
-root.resizable(height=FALSE, width=FALSE)
-
-def exit_video():
-	root.quit()
+root.geometry("60x40")
 
 def printf():
 	global index 
@@ -29,7 +24,6 @@ def Search():
 
 	if word_insert.get() in Jellies.new_lst:
 		#print("yes")
-		
 
 		key = word_insert.get()
 		file_1 = open('Test.srt','r')
@@ -41,32 +35,12 @@ def Search():
 		subs = list(srt.parse(f))
 		#print(subs)
 		final_window = Tk()
-		final_window.iconbitmap('favicon.ico')
-		final_window.resizable(height=FALSE, width=FALSE)
 		final_window.title("the subtitle time stamps")
-		final_window.geometry("500x300")
-
-		main_frame = Frame(final_window)
-		main_frame.pack(fill= BOTH, expand=1)
-
-
-		my_canvas= Canvas(main_frame)
-		my_canvas.pack(side=LEFT, fill= BOTH, expand=1)
-
-		my_scrollbar= ttk.Scrollbar(main_frame, orient= VERTICAL, command= my_canvas.yview)
-		my_scrollbar.pack(side=RIGHT, fill=Y)
-
-		my_canvas.configure(yscrollcommand= my_scrollbar.set)
-		my_canvas.bind('<Configure>',lambda e: my_canvas.configure(scrollregion= my_canvas.bbox("all")))
-
-		second_frame= Frame(my_canvas)
-		my_canvas.create_window((0,0), window= second_frame, anchor="nw")
-
 
 		for sub in subs:
 			if key in sub.content:
 				
-				Label(second_frame, text= "from "+str(sub.start) + " to "+ str(sub.end) +" - "+ sub.content).pack()
+				Label(final_window, text= "from "+str(sub.start) + " to "+ str(sub.end) +" - "+ sub.content).pack()
 				#print(sub.start, sub.end, sub.content)
 			
 		#print("hello")
@@ -78,24 +52,16 @@ def Search():
 		#     if key in line:
 
 		#         print(line)
-		sub_window.destroy()
 	else:
-		
-		messagebox.showwarning("error","unfortunatly " + word_insert.get() +" does not exist in the script") 
-		'''err_window= Tk()
-								err_window.resizable(height=FALSE, width=FALSE)
-								err_label= Label(err_window, text= "unfortunatly " + word_insert.get() +" does not exist in the script")
-								err_label.pack(padx=10, pady=10)'''
+		 err_label= Label(sub_window, text= "unfortunatly " + word_insert.get() +" does not exist")
+		 err_label.grid(row=2,column=0)
 
-	
+	#sub_window.destroy()
 
 def open_sW():
 	global word_insert
 	global sub_window
 	sub_window= Tk()
-	sub_window.title("search for word")
-	sub_window.iconbitmap('favicon.ico')
-	sub_window.resizable(height=FALSE, width=FALSE)
 	label_prompt=Label(sub_window, text="enter the word:")
 	word_insert= Entry(sub_window, width=30)
 	search_button= Button(sub_window,text="search", width=20, command= Search)
@@ -117,9 +83,7 @@ def open_video():
 	global list_box
 	global sec_window
 	sec_window= Tk()
-	sec_window.iconbitmap('favicon.ico')
 	sec_window.title("videos")
-	sec_window.resizable(height=FALSE, width= FALSE)
 	sec_window.geometry("180x250")
 	list_box= Listbox(sec_window)
 	videos_list= glob.glob("*mp4")
@@ -137,11 +101,9 @@ def open_video():
 	cancel_b.grid(row=2, column=0)
 
 b_1= Button(root, text= "click here for video list", command= open_video)
-e_1= Button(root, text= "exit", command= exit_video)
 
 def start_video():
 	pass
 
 b_1.pack()
-e_1.pack()
 root.mainloop()
